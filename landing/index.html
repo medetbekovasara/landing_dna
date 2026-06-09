@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ContentDNA reveals the voice, patterns, filters, and strategy already encoded in your published content.">
+  <title>ContentDNA — AI Content Identity System</title>
+  <style>
+    @font-face {
+      font-family: "Syne";
+      src: url("./frontend/assets/fonts/syne-700.ttf") format("truetype");
+      font-weight: 700;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Syne";
+      src: url("./frontend/assets/fonts/syne-800.ttf") format("truetype");
+      font-weight: 800;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./frontend/assets/fonts/dm-sans-400.ttf") format("truetype");
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./frontend/assets/fonts/dm-sans-500.ttf") format("truetype");
+      font-weight: 500;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "DM Sans";
+      src: url("./frontend/assets/fonts/dm-sans-600.ttf") format("truetype");
+      font-weight: 600;
+      font-display: swap;
+    }
+
+    :root {
+      --void: #050505;
+      --carbon: #0d0e0e;
+      --paper: #f2f3ef;
+      --white: #f8f9f4;
+      --ink: #101111;
+      --muted: #8c918b;
+      --muted-light: #62675f;
+      --lime: #9bff22;
+      --blue: #5e7dff;
+      --cyan: #79d8ea;
+      --line: rgba(255, 255, 255, .13);
+      --line-dark: rgba(16, 17, 17, .15);
+      --display: "Syne", Arial, sans-serif;
+      --body: "DM Sans", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { overflow-x: clip; scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--void);
+      color: var(--white);
+      font-family: var(--body);
+      line-height: 1.45;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    h1, h2, h3, p { margin-top: 0; }
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+    .wrap { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
+
+    .site-header {
+      position: absolute;
+      z-index: 30;
+      inset: 0 0 auto;
+      border-bottom: 1px solid var(--line);
+      color: var(--white);
+    }
+    .nav {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+    .logo {
+      font: 800 18px/1 var(--display);
+      letter-spacing: 0;
+    }
+    .logo span { color: var(--lime); }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .nav-links a { opacity: .7; }
+    .nav-links a:hover { opacity: 1; color: var(--lime); }
+    .nav-cta { justify-self: end; }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0 20px;
+      border: 1px solid var(--lime);
+      border-radius: 3px;
+      background: var(--lime);
+      color: var(--ink);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+    }
+    .button:hover {
+      border-color: var(--white);
+      background: var(--white);
+      transform: translateY(-2px);
+    }
+    .button.small { min-height: 34px; padding-inline: 14px; font-size: 11px; }
+    .button.secondary { border-color: rgba(255,255,255,.42); background: transparent; color: var(--white); }
+    .button.secondary:hover { border-color: var(--lime); background: transparent; color: var(--lime); }
+
+    .hero {
+      position: relative;
+      min-height: 890px;
+      padding: 92px 0 54px;
+      overflow: hidden;
+      isolation: isolate;
+      background-color: #0b1520;
+      background-image: url("./photo.jpg");
+      background-size: cover;
+      background-position: center 48%;
+    }
+    .hero::before {
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      content: "";
+      background: rgba(4, 7, 12, .56);
+    }
+    .hero::after {
+      position: absolute;
+      z-index: -1;
+      inset: auto 0 0;
+      height: 44%;
+      content: "";
+      background: rgba(5, 5, 5, .84);
+      box-shadow: 0 -70px 110px rgba(5, 5, 5, .72);
+    }
+    .hero-grid {
+      min-height: 744px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      position: relative;
+    }
+    .hero-title {
+      align-self: start;
+      padding-top: 26px;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--lime);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 25px; height: 1px; content: ""; background: currentColor; }
+    h1 {
+      max-width: 1160px;
+      margin-bottom: 0;
+      color: var(--lime);
+      font: 700 clamp(68px, 8vw, 126px)/.94 var(--display);
+      letter-spacing: 0;
+    }
+    h1 span { display: block; color: var(--white); }
+    .hero-lower {
+      display: grid;
+      grid-template-columns: minmax(0, .85fr) minmax(540px, 1.15fr);
+      align-items: end;
+      gap: 48px;
+    }
+    .hero-copy {
+      max-width: 520px;
+      margin-bottom: 24px;
+      color: rgba(255,255,255,.78);
+      font-size: 17px;
+    }
+    .hero-copy strong { color: var(--white); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 28px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .hero-meta span { padding: 13px 12px 0 0; }
+
+    .producer {
+      position: relative;
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,.34);
+      background: rgba(5, 7, 10, .72);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+    .producer::before {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--lime);
+      box-shadow: 0 0 22px rgba(155, 255, 34, .65);
+      content: "";
+      animation: console-scan 5s ease-in-out infinite;
+    }
+    .producer-top {
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .live-dot { display: inline-flex; align-items: center; gap: 8px; color: var(--white); }
+    .live-dot::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 14px rgba(155,255,34,.8);
+      content: "";
+    }
+    .console-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+    }
+    .problem-board {
+      min-height: 264px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      padding: 1px;
+      background: var(--line);
+    }
+    .problem-question {
+      grid-column: 1 / -1;
+      min-height: 76px;
+      padding: 15px;
+      background: rgba(8,9,10,.96);
+      font: 700 23px/1.05 var(--display);
+    }
+    .problem-question span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--lime);
+      font: 600 8px/1 var(--body);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .idea-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(12,13,14,.96);
+    }
+    .idea-card:nth-of-type(4) { grid-column: 1 / -1; }
+    .idea-media {
+      width: 48px;
+      height: 52px;
+      background-image: url("./frontend/assets/images/creator-content-sources-v1.jpg");
+      background-repeat: no-repeat;
+      background-size: 300% 100%;
+      filter: saturate(.82) contrast(1.08);
+    }
+    .idea-media.founder { background-position: left center; }
+    .idea-media.product { background-position: center center; }
+    .idea-media.insight { background-position: right center; }
+    .idea-type {
+      color: var(--cyan);
+      font-size: 8px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .idea-card.instagram .idea-type { color: var(--lime); }
+    .idea-card strong { display: block; margin: 3px 0 1px; font-size: 11px; line-height: 1.15; }
+    .idea-card small { display: block; overflow: hidden; color: var(--muted); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+    .problem-status { display: none; }
+    .transform-line { display: none; }
+    .plan-board {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: rgba(7,8,9,.94);
+      border-left: 1px solid var(--line);
+    }
+    .plan-summary {
+      min-height: 77px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+    .plan-summary small { color: var(--muted); font-size: 8px; text-transform: uppercase; }
+    .plan-summary strong { display: block; margin-top: 4px; font: 700 17px/1 var(--display); }
+    .script-count { color: var(--lime); font: 700 38px/.85 var(--display); }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 1px;
+      padding: 1px;
+      background: var(--line);
+    }
+    .day {
+      min-height: 49px;
+      padding: 6px;
+      background: var(--carbon);
+      color: #565b56;
+      font-size: 8px;
+      transition: background .3s ease, color .3s ease;
+    }
+    .day.has-script { color: var(--white); }
+    .day.has-script::after {
+      width: 5px;
+      height: 5px;
+      display: block;
+      margin-top: 13px;
+      border-radius: 50%;
+      background: var(--lime);
+      content: "";
+    }
+    .day.active { background: var(--lime); color: var(--ink); }
+    .day.active::after { background: var(--ink); }
+    .plan-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 8px;
+      text-transform: uppercase;
+    }
+    .plan-ready { color: var(--lime); }
+
+    .crosshair {
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      pointer-events: none;
+    }
+    .crosshair::before, .crosshair::after {
+      position: absolute;
+      background: rgba(255,255,255,.68);
+      content: "";
+    }
+    .crosshair::before { width: 17px; height: 1px; top: 8px; left: 0; }
+    .crosshair::after { width: 1px; height: 17px; top: 0; left: 8px; }
+    .crosshair.one { top: 26%; right: 15%; }
+    .crosshair.two { bottom: 20%; left: 6%; }
+
+    .signal-strip {
+      border-block: 1px solid var(--line);
+      overflow: hidden;
+      background: var(--void);
+    }
+    .signal-track {
+      width: max-content;
+      display: flex;
+      animation: ticker 28s linear infinite;
+    }
+    .signal-track span {
+      min-width: 240px;
+      padding: 16px 28px;
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .signal-track strong { color: var(--lime); }
+
+    .section {
+      position: relative;
+      padding: clamp(90px, 10vw, 150px) 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--void);
+    }
+    .section.paper {
+      border-color: var(--line-dark);
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 32px;
+      padding-top: 15px;
+      border-top: 1px solid currentColor;
+      margin-bottom: 58px;
+    }
+    .section-index {
+      color: var(--lime);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .paper .section-index { color: #4f6900; }
+    h2 {
+      max-width: 900px;
+      margin-bottom: 18px;
+      font: 700 clamp(42px, 5vw, 74px)/.98 var(--display);
+      letter-spacing: 0;
+    }
+    .section-intro {
+      max-width: 650px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+    .paper .section-intro { color: var(--muted-light); }
+
+    .manifesto {
+      min-height: 720px;
+      overflow: hidden;
+    }
+    .manifesto-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--line);
+    }
+    .manifesto-copy, .manifesto-visual { min-height: 420px; background: var(--void); }
+    .manifesto-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+    }
+    .manifesto-copy strong {
+      max-width: 520px;
+      font: 700 clamp(34px, 4vw, 60px)/1 var(--display);
+      color: var(--lime);
+    }
+    .manifesto-copy p { max-width: 390px; margin: 0; color: var(--muted); }
+    .manifesto-visual {
+      position: relative;
+      overflow: hidden;
+      background-image: url("./photo2.jpg");
+      background-size: cover;
+      background-position: center 58%;
+    }
+    .manifesto-visual::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: rgba(27, 48, 75, .34);
+    }
+    .visual-caption {
+      position: absolute;
+      z-index: 2;
+      right: 20px;
+      bottom: 18px;
+      left: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--white);
+      font-size: 9px;
+      text-transform: uppercase;
+    }
+
+    .deliverable-grid {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      border-top: 1px solid var(--line-dark);
+      border-left: 1px solid var(--line-dark);
+      background: var(--line-dark);
+    }
+    .brief, .shoot-list { background: var(--paper); }
+    .brief { padding: clamp(28px, 5vw, 58px); }
+    .brief-label {
+      display: inline-flex;
+      margin-bottom: 45px;
+      padding: 7px 9px;
+      background: var(--lime);
+      color: var(--ink);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .brief h3 {
+      max-width: 680px;
+      margin-bottom: 34px;
+      font: 700 clamp(31px, 3.6vw, 54px)/1.02 var(--display);
+    }
+    .brief-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 20px;
+      padding: 17px 0;
+      border-top: 1px solid var(--line-dark);
+    }
+    .brief-row dt {
+      color: #526d00;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .brief-row dd { margin: 0; }
+    .shoot-list {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      border-left: 1px solid var(--line-dark);
+    }
+    .shoot-card {
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      border-bottom: 1px solid var(--line-dark);
+      transition: background .2s ease, color .2s ease;
+    }
+    .shoot-card:last-child { border-bottom: 0; }
+    .shoot-card:hover { background: var(--lime); }
+    .shoot-card small { color: var(--muted-light); font-size: 9px; text-transform: uppercase; }
+    .shoot-card h3 { margin: 12px 0 7px; font: 600 23px/1.05 var(--body); }
+    .shoot-card p { margin: 0; color: var(--muted-light); font-size: 13px; }
+
+    .scope-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .scope-card {
+      min-height: 290px;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .scope-num { color: var(--lime); font-size: 10px; }
+    .scope-card h3 { margin: auto 0 12px; font: 600 25px/1.05 var(--body); }
+    .scope-card p { margin: 0; color: var(--muted); }
+
+    .process-section {
+      overflow: hidden;
+      background: #0a0b10;
+      box-shadow: inset 0 120px 120px rgba(94,125,255,.16), inset 0 -110px 130px rgba(121,216,234,.12);
+    }
+    .process-section .section-head { border-color: rgba(255,255,255,.3); }
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,.35);
+      border-left: 1px solid rgba(255,255,255,.35);
+    }
+    .phase {
+      min-height: 330px;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border-right: 1px solid rgba(255,255,255,.35);
+      border-bottom: 1px solid rgba(255,255,255,.35);
+      background: rgba(5,5,5,.48);
+      transition: background .25s ease, color .25s ease;
+    }
+    .phase:hover { background: var(--lime); color: var(--ink); }
+    .phase-day { color: var(--lime); font-size: 9px; text-transform: uppercase; }
+    .phase:hover .phase-day { color: var(--ink); }
+    .phase h3 { margin: auto 0 12px; font: 700 30px/1 var(--display); }
+    .phase p { margin: 0; color: var(--muted); }
+    .phase:hover p { color: #334000; }
+
+    .price-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 1px;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+      background: var(--line);
+    }
+    .price-card, .fit-copy { background: var(--void); }
+    .price-card { min-height: 500px; display: flex; flex-direction: column; padding: 30px; }
+    .price { margin: auto 0 5px; color: var(--lime); font: 700 clamp(70px, 8vw, 118px)/.84 var(--display); }
+    .price-card p { color: var(--muted); }
+    .price-card .button { margin-top: 22px; }
+    .fit-copy { padding: clamp(30px, 5vw, 62px); }
+    .fit-copy h3 { font: 700 34px/1 var(--display); }
+    .fit-copy > p { max-width: 560px; color: var(--muted); }
+    .fit-list { margin: 36px 0; padding: 0; list-style: none; }
+    .fit-list li { position: relative; padding: 17px 0 17px 28px; border-top: 1px solid var(--line); }
+    .fit-list li::before { position: absolute; left: 0; color: var(--lime); content: "↗"; }
+    .scope-note { padding-top: 18px; border-top: 1px solid var(--lime); color: var(--muted); font-size: 13px; }
+
+    .faq { border-top: 1px solid var(--line-dark); }
+    details { border-bottom: 1px solid var(--line-dark); }
+    summary {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      cursor: pointer;
+      font: 600 clamp(18px, 2vw, 25px)/1.2 var(--body);
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { color: #526d00; content: "+"; font-size: 26px; }
+    details[open] summary::after { content: "−"; }
+    details p { max-width: 760px; margin: 0; padding: 0 0 26px; color: var(--muted-light); }
+
+    .application-section {
+      overflow: hidden;
+      background: #071018;
+      box-shadow: inset 0 120px 150px rgba(94,125,255,.16);
+    }
+    .application-grid {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: clamp(48px, 8vw, 100px);
+      align-items: start;
+    }
+    .application-copy h2 { color: var(--lime); }
+    .application-copy p { max-width: 520px; color: rgba(255,255,255,.75); }
+    .privacy-note { font-size: 12px; }
+    .application-form { display: grid; gap: 18px; }
+    .application-form label { display: grid; gap: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+    .application-form input {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 14px;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 2px;
+      background: rgba(5,5,5,.64);
+      color: var(--white);
+    }
+    .application-form input:focus { border-color: var(--lime); outline: 0; }
+    .form-disclosure { margin: 0; color: var(--muted); font-size: 11px; text-transform: none; }
+    .application-output { display: none; padding: 28px; border: 1px solid var(--lime); background: var(--void); }
+    .application-output.show { display: block; }
+    .application-output h3 { font: 700 31px/1 var(--display); color: var(--lime); }
+
+    footer { border-top: 1px solid var(--line); background: var(--void); }
+    .footer-grid {
+      min-height: 90px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+    .footer-grid span:last-child { justify-self: end; }
+
+    .reveal { opacity: 1; transform: none; }
+    .motion-ready .reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
+    .motion-ready .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes ticker { to { transform: translateX(-50%); } }
+    @keyframes console-scan {
+      0%, 12% { left: 0; opacity: 0; }
+      18% { opacity: 1; }
+      74% { left: 100%; opacity: 1; }
+      82%, 100% { left: 100%; opacity: 0; }
+    }
+
+    @media (max-width: 980px) {
+      .hero { min-height: 1050px; background-position: center 48%; }
+      .hero-lower { grid-template-columns: 1fr; }
+      .producer { max-width: 760px; }
+      .deliverable-grid, .price-layout, .application-grid { grid-template-columns: 1fr; }
+      .shoot-list { grid-template-columns: repeat(3, 1fr); grid-template-rows: none; border-left: 0; border-top: 1px solid var(--line-dark); }
+      .shoot-card { border-right: 1px solid var(--line-dark); border-bottom: 0; }
+      .scope-grid { grid-template-columns: repeat(2, 1fr); }
+      .timeline { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .wrap { width: min(100% - 28px, 1240px); }
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-links { display: none; }
+      .hero { min-height: 820px; padding: 72px 0 24px; background-position: 50% 48%; }
+      .hero-grid { min-height: 724px; }
+      .hero-title { padding-top: 15px; }
+      h1 { font-size: clamp(51px, 13vw, 68px); }
+      .hero-copy { margin-bottom: 16px; font-size: 14px; }
+      .hero-lower { gap: 16px; }
+      .hero-actions .button { min-height: 40px; font-size: 12px; }
+      .hero-meta { display: none; }
+      .producer-top { min-height: 34px; }
+      .console-grid { grid-template-columns: 1.05fr .95fr; }
+      .problem-board { min-height: 236px; display: block; padding: 0; background: transparent; }
+      .problem-question { min-height: 72px; padding: 11px; border-bottom: 1px solid var(--line); font-size: 16px; }
+      .idea-card { min-height: 82px; padding: 9px; }
+      .idea-card:nth-of-type(3), .idea-card:nth-of-type(4) { display: none; }
+      .idea-media { width: 40px; height: 44px; }
+      .plan-board { min-height: 236px; }
+      .plan-summary { min-height: 72px; padding: 10px; }
+      .plan-summary strong { font-size: 13px; }
+      .script-count { font-size: 29px; }
+      .calendar { grid-template-columns: repeat(7, minmax(18px, 1fr)); }
+      .day { min-height: 38px; padding: 4px; font-size: 7px; }
+      .day.has-script::after { margin-top: 8px; }
+      .plan-footer { padding: 8px; font-size: 7px; }
+      .section-head { grid-template-columns: 1fr; gap: 15px; margin-bottom: 38px; }
+      .manifesto-layout { grid-template-columns: 1fr; }
+      .manifesto-copy, .manifesto-visual { min-height: 360px; }
+      .scope-grid, .timeline { grid-template-columns: 1fr; }
+      .scope-card { min-height: 230px; }
+      .phase { min-height: 240px; }
+      .shoot-list { grid-template-columns: 1fr; }
+      .shoot-card { min-height: 150px; border-right: 0; border-bottom: 1px solid var(--line-dark); }
+      .brief-row { grid-template-columns: 1fr; gap: 5px; }
+      .footer-grid { grid-template-columns: 1fr; padding-block: 24px; }
+      .footer-grid span:last-child { justify-self: start; }
+    }
+    @media (max-width: 480px) {
+      .nav-cta { display: none; }
+      .hero { min-height: 820px; }
+      .hero-actions { gap: 7px; }
+      .hero-actions .button { padding-inline: 12px; }
+      .idea-card { grid-template-columns: 40px minmax(0, 1fr); }
+      .plan-footer span:first-child { display: none; }
+      .manifesto-copy { padding: 24px; }
+      .price-card { min-height: 420px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Primary navigation">
+      <a class="logo" href="#top">Content<span>DNA</span></a>
+      <div class="nav-links">
+        <a href="#system">System</a>
+        <a href="#outputs">Outputs</a>
+        <a href="#process">Process</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a class="button small nav-cta" href="#apply">Analyze content <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <span class="crosshair one" aria-hidden="true"></span>
+      <span class="crosshair two" aria-hidden="true"></span>
+      <div class="hero-grid wrap">
+        <div class="hero-title">
+          <div class="eyebrow">Evidence-based creator intelligence</div>
+          <h1>The intelligence <span>behind your content.</span></h1>
+        </div>
+
+        <div class="hero-lower">
+          <div>
+            <p class="hero-copy">Your published content already contains a system. ContentDNA reads posts, carousels, and videos to reveal your <strong>voice, archetype, red lines, and next strategic move.</strong></p>
+            <div class="hero-actions">
+              <a class="button" href="#apply">Build my Content DNA <span aria-hidden="true">↗</span></a>
+              <a class="button secondary" href="#outputs">Inspect the output</a>
+            </div>
+            <div class="hero-meta">
+              <span>Instagram / TikTok / text</span>
+              <span>Source-grounded analysis</span>
+              <span>Scout + Validator review</span>
+            </div>
+          </div>
+
+          <aside class="producer" aria-label="Illustrative ContentDNA analysis console">
+            <div class="producer-top"><span>Analysis 047 / active</span><span class="live-dot">Resolving signals</span></div>
+            <div class="console-grid">
+              <div class="problem-board">
+                <div class="problem-question"><span>Input signal</span>Three posts. One recognizable author.</div>
+                <div class="idea-card instagram"><span class="idea-media insight"></span><span><span class="idea-type">Carousel · 07 slides</span><strong>AI workflow breakdown</strong><small>Caption + visible slide text</small></span></div>
+                <div class="idea-card"><span class="idea-media founder"></span><span><span class="idea-type">Reel · 00:48</span><strong>Founder point of view</strong><small>Transcript + CTA pattern</small></span></div>
+                <div class="idea-card instagram"><span class="idea-media product"></span><span><span class="idea-type">Post · image</span><strong>Product belief</strong><small>Vocabulary + red lines</small></span></div>
+                <div class="problem-status"><strong>3 sources</strong> · OCR complete · transcript complete</div>
+              </div>
+              <div class="transform-line"><span>ContentDNA finds the signal</span></div>
+              <div class="plan-board">
+                <div class="plan-summary"><div><small>Validated profile</small><strong>Your Content DNA</strong></div><div><span class="script-count">94</span><small>%</small></div></div>
+                <div class="calendar" aria-label="ContentDNA signal stages">
+                  <div class="day has-script active">01</div><div class="day">02</div><div class="day has-script">03</div><div class="day has-script">04</div><div class="day">05</div><div class="day has-script">06</div><div class="day">07</div>
+                  <div class="day has-script">08</div><div class="day">09</div><div class="day has-script">10</div><div class="day has-script">11</div><div class="day">12</div><div class="day has-script">13</div><div class="day">14</div>
+                </div>
+                <div class="plan-footer"><span>Tone · slang · filters · CTA</span><span class="plan-ready">Quality passed</span></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <div class="signal-strip" aria-hidden="true">
+      <div class="signal-track">
+        <span><strong>Source 01</strong> carousel read</span><span>Voice patterns isolated</span><span><strong>Source 02</strong> transcript read</span><span>Red lines verified</span><span><strong>DNA profile</strong> resolved</span>
+        <span><strong>Source 01</strong> carousel read</span><span>Voice patterns isolated</span><span><strong>Source 02</strong> transcript read</span><span>Red lines verified</span><span><strong>DNA profile</strong> resolved</span>
+      </div>
+    </div>
+
+    <section class="section manifesto" id="system" aria-labelledby="system-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-index">01 / The system</div>
+          <div>
+            <h2 id="system-title">Content is not random. It leaves a signature.</h2>
+            <p class="section-intro">ContentDNA converts visible choices into a usable identity system: how you speak, what you reject, what your audience recognizes, and how your next content should behave.</p>
+          </div>
+        </div>
+        <div class="manifesto-layout reveal">
+          <article class="manifesto-copy">
+            <span class="section-index">Pattern recognition / not imitation</span>
+            <strong>Nothing starts from zero. Every post leaves evidence.</strong>
+            <p>The system does not copy a creator. It extracts durable rules that future scripts can follow without losing the author’s character.</p>
+          </article>
+          <div class="manifesto-visual" role="img" aria-label="Creator reviewing content and recording voice notes">
+            <div class="visual-caption"><span>Source archive / creator workflow</span><span>Signal 047</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section paper" id="outputs" aria-labelledby="outputs-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-index">02 / Output preview</div>
+          <div>
+            <h2 id="outputs-title">A digital passport for every future content decision.</h2>
+            <p class="section-intro">The output is structured for use, not presentation: a corrected niche, grounded archetype, speech mechanics, hard filters, and an objective-specific CTA.</p>
+          </div>
+        </div>
+        <div class="deliverable-grid reveal">
+          <article class="brief">
+            <div class="brief-label">Illustrative Content DNA / validated</div>
+            <h3>“The practical technologist who makes complex tools feel usable.”</h3>
+            <dl>
+              <div class="brief-row"><dt>Niche</dt><dd>AI workflows and product thinking for independent creators and builders.</dd></div>
+              <div class="brief-row"><dt>Voice</dt><dd>Short claims, practical evidence, direct verbs, and low tolerance for abstract hype.</dd></div>
+              <div class="brief-row"><dt>Red lines</dt><dd>No false urgency, no “magic solution” language, no trend participation without a useful point.</dd></div>
+              <div class="brief-row"><dt>CTA</dt><dd>Ask for one concrete action that continues the lesson: save, test, compare, or request a breakdown.</dd></div>
+            </dl>
+          </article>
+          <aside class="shoot-list">
+            <div class="shoot-card"><small>Signal 01</small><h3>Tone of voice</h3><p>Rhythm, sentence length, slang, technical vocabulary, and delivery style.</p></div>
+            <div class="shoot-card"><small>Signal 02</small><h3>Hard filters</h3><p>Forbidden phrases, rejected clichés, and behavior that breaks the author’s image.</p></div>
+            <div class="shoot-card"><small>Signal 03</small><h3>Strategy</h3><p>A CTA pattern adapted to sales, reach, or community goals.</p></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section process-section" id="process" aria-labelledby="process-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-index">04 / Process</div>
+          <div><h2 id="process-title">From raw material to a verified identity system.</h2></div>
+        </div>
+        <div class="timeline reveal">
+          <article class="phase"><span class="phase-day">Stage 01</span><h3>Collect</h3><p>Add posts, carousels, Reels, TikTok links, transcripts, or direct text.</p></article>
+          <article class="phase"><span class="phase-day">Stage 02</span><h3>Read</h3><p>Caption, OCR, and speech layers are extracted independently so one failure does not erase a source.</p></article>
+          <article class="phase"><span class="phase-day">Stage 03</span><h3>Resolve</h3><p>Scout converts repeated evidence into niche, archetype, voice, filters, and CTA.</p></article>
+          <article class="phase"><span class="phase-day">Stage 04</span><h3>Validate</h3><p>Validator challenges unsupported claims and returns a quality score with limitations.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="price" aria-labelledby="price-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-index">05 / Pilot access</div>
+          <div>
+            <h2 id="price-title">$349 to turn your existing content into a working identity system.</h2>
+            <p class="section-intro">One evidence-based Content DNA profile, source review, quality validation, and a practical strategy layer. No performance guarantees.</p>
+          </div>
+        </div>
+        <div class="price-layout reveal">
+          <div class="price-card">
+            <div class="eyebrow">ContentDNA pilot</div>
+            <div class="price">$349</div>
+            <p>Scope is confirmed before payment.</p>
+            <a class="button" href="#apply">Check your fit <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="fit-copy">
+            <h3>This is useful when:</h3>
+            <p>You already publish, but your content decisions still depend on memory, mood, or generic AI prompts.</p>
+            <ul class="fit-list">
+              <li>You have at least three representative pieces of content.</li>
+              <li>You want AI output to sound recognizably yours.</li>
+              <li>You need explicit language, red lines, and CTA rules.</li>
+            </ul>
+            <div class="scope-note"><strong>ContentDNA analyses evidence. It does not guarantee virality, reach, leads, sales, or platform distribution.</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section paper" id="faq" aria-labelledby="faq-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-index">06 / FAQ</div>
+          <div><h2 id="faq-title">What the system can and cannot conclude.</h2></div>
+        </div>
+        <div class="faq reveal">
+          <details><summary>Can it read ordinary posts and carousels?</summary><p>Yes. ContentDNA reads captions and visible image text. Reels and TikTok videos may also include speech transcripts.</p></details>
+          <details><summary>What if I do not know my niche or audience?</summary><p>You can answer diagnostic questions in plain language or leave them blank. The system treats your answers as hypotheses and compares them with the sources.</p></details>
+          <details><summary>Does it copy another creator’s style?</summary><p>No. The profile describes durable rules and observable mechanics. It is designed to preserve identity without reproducing specific content.</p></details>
+          <details><summary>What happens when sources contradict my onboarding answers?</summary><p>The Validator marks the contradiction and may return the profile as needing review instead of pretending the evidence agrees.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section application-section" id="apply" aria-labelledby="apply-title">
+      <div class="application-grid wrap">
+        <div class="application-copy reveal">
+          <div class="section-index">07 / Start with evidence</div>
+          <h2 id="apply-title">Your content already knows who you are.</h2>
+          <p>Share your name, email, and main social profile. We will confirm whether the available material is sufficient for a reliable Content DNA analysis.</p>
+          <p class="privacy-note">Public links only. Never send passwords, customer data, payment credentials, or private analytics access.</p>
+        </div>
+        <div>
+          <form class="application-form" id="pilotForm" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="2f0cc16d-de86-4e6c-a635-5b579d97c571">
+            <input type="hidden" name="subject" value="New ContentDNA analysis application">
+            <input type="hidden" name="from_name" value="ContentDNA website">
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none">
+            <label>First and last name<input name="name" autocomplete="name" required placeholder="Jane Smith"></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required placeholder="jane@company.com"></label>
+            <label>Social profile link<input name="social" type="url" autocomplete="url" required placeholder="https://instagram.com/youraccount"></label>
+            <button class="button" type="submit" id="submitApplication">Request analysis <span aria-hidden="true">↗</span></button>
+            <p class="form-disclosure">No payment is collected on this page.</p>
+          </form>
+          <div class="application-output" id="applicationOutput" role="status" aria-live="polite">
+            <h3 id="applicationStatusTitle">Request sent.</h3>
+            <p id="applicationStatusText">Thank you. We will reply using the email you provided.</p>
+            <button class="button secondary" type="button" id="editApplication">Send another request</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid wrap">
+      <a class="logo" href="#top">Content<span>DNA</span></a>
+      <span>AI Content Identity System / Pilot</span>
+      <span>Evidence first / No passwords</span>
+    </div>
+  </footer>
+
+  <script>
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const revealItems = document.querySelectorAll(".reveal");
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      revealItems.forEach((item) => item.classList.add("visible"));
+    } else {
+      document.documentElement.classList.add("motion-ready");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12, rootMargin: "0px 0px -40px" });
+      revealItems.forEach((item) => observer.observe(item));
+    }
+
+    const calendarDays = [...document.querySelectorAll(".day.has-script")];
+    let activeDay = 0;
+    if (!reduceMotion && calendarDays.length) {
+      setInterval(() => {
+        calendarDays[activeDay].classList.remove("active");
+        activeDay = (activeDay + 1) % calendarDays.length;
+        calendarDays[activeDay].classList.add("active");
+      }, 1450);
+    }
+
+    const form = document.getElementById("pilotForm");
+    const output = document.getElementById("applicationOutput");
+    const submitButton = document.getElementById("submitApplication");
+    const statusTitle = document.getElementById("applicationStatusTitle");
+    const statusText = document.getElementById("applicationStatusText");
+    const editButton = document.getElementById("editApplication");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const accessKey = String(data.get("access_key") || "");
+
+      if (!accessKey || accessKey.startsWith("YOUR_")) {
+        statusTitle.textContent = "Web3Forms access key is missing.";
+        statusText.textContent = "Add your Web3Forms access key before publishing the form.";
+        output.classList.add("show");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+
+      try {
+        const response = await fetch(form.action, { method: "POST", body: data });
+        const result = await response.json();
+        if (!response.ok || !result.success) throw new Error(result.message || "Web3Forms could not send the request.");
+        statusTitle.textContent = "Request sent.";
+        statusText.textContent = "Thank you. We will reply using the email you provided.";
+        form.reset();
+        form.hidden = true;
+      } catch (error) {
+        if (error instanceof TypeError) {
+          HTMLFormElement.prototype.submit.call(form);
+          return;
+        }
+        statusTitle.textContent = "The request was not sent.";
+        statusText.textContent = error.message || "Please try again in a moment.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Request analysis";
+        output.classList.add("show");
+        output.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+      }
+    });
+
+    editButton.addEventListener("click", () => {
+      output.classList.remove("show");
+      form.hidden = false;
+      form.querySelector('input[name="name"]').focus();
+    });
+  </script>
+</body>
+</html>
