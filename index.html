@@ -166,15 +166,15 @@
     .hero-refresh .hero-layout {
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 320px;
-      gap: 48px;
+      grid-template-columns: 1fr;
+      gap: 0;
       align-items: end;
     }
     .hero-refresh .hero-copy-block {
-      width: min(780px, 100%);
+      width: min(760px, 100%);
       display: grid;
       justify-items: start;
-      gap: 24px;
+      gap: 20px;
       text-align: left;
       padding-top: 96px;
       padding-bottom: 64px;
@@ -196,7 +196,7 @@
       flex-wrap: wrap;
       justify-content: flex-start;
       gap: 12px;
-      margin-top: 6px;
+      margin-top: 2px;
     }
     .hero-actions .button {
       min-width: 168px;
@@ -1343,9 +1343,8 @@
       .deliverables-grid,
       .report-layout,
       .cta-layout { grid-template-columns: 1fr; }
-      .hero-refresh .hero-layout { grid-template-columns: 1fr; gap: 24px; }
+      .hero-refresh .hero-layout { grid-template-columns: 1fr; gap: 0; }
       .hero-refresh h1 { font-size: 84px; white-space: normal; }
-      .hero-signal { max-width: 520px; }
       .report-summary { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.10); }
       .report-meta { grid-template-columns: 1fr; }
       .report-meta span:last-child { text-align: left; }
@@ -1373,8 +1372,6 @@
       .hero-copy { margin-bottom: 16px; font-size: 14px; }
       .hero-lower { gap: 16px; }
       .hero-actions .button { min-height: 40px; font-size: 12px; }
-      .hero-signal { margin-bottom: 36px; padding: 14px; }
-      .hero-signal-row { grid-template-columns: 72px 1fr; }
       .producer-top { min-height: 34px; }
       .console-grid { grid-template-columns: 1.05fr .95fr; }
       .problem-board { min-height: 236px; display: block; padding: 0; background: transparent; }
@@ -1638,7 +1635,7 @@
         <div class="cta-copy reveal">
           <div class="section-index">05 / Final CTA</div>
           <h2 id="apply-title">Get early access to CreatorDNA.</h2>
-          <p>Join the first cohort with your name, email, and main social profile.</p>
+          <p>Join the first cohort with your name and email.</p>
           <p class="privacy-note">Public links only. No passwords or private analytics access.</p>
         </div>
         <div class="cta-panel reveal">
@@ -1649,7 +1646,6 @@
             <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none">
             <label>First and last name<input name="name" autocomplete="name" required placeholder="Jane Smith"></label>
             <label>Email<input name="email" type="email" autocomplete="email" required placeholder="jane@company.com"></label>
-            <label>Social profile link<input name="social" type="url" autocomplete="url" required placeholder="https://instagram.com/youraccount"></label>
             <button class="button" type="submit" id="submitApplication">Join the waitlist <span aria-hidden="true">↗</span></button>
             <p class="form-disclosure">No payment is collected on this page.</p>
           </form>
